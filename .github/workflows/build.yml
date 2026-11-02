@@ -7,7 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: unzip -q GlassHome.zip
+        with:
+          fetch-depth: 0
+      - name: Unzip newest zip
+        run: |
+          f=$(git -c core.quotepath=false log --diff-filter=AM --name-only --format= -- '*.zip' | head -n 1)
+          echo "Using: $f"
+          unzip -qo "$f"
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
